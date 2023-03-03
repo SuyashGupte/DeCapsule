@@ -13,7 +13,7 @@ import {
 import * as web3 from "@solana/web3.js"
 
 
-export const Upload: FC = () => {
+export const MintTimeCapsules: FC = () => {
 
     const wallet = useWallet()
     const connection = new web3.Connection(web3.clusterApiUrl(strings.NETWORK as web3.Cluster));
