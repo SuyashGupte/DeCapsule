@@ -10,7 +10,8 @@ const Home: NextPage = () => {
       <Head>
         <title>DeCapsule</title>
       </Head>
-      <Header />
+      <Header /> 
+      <Upload />
       
     </div>
   )

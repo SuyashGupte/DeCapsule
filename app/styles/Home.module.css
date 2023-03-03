@@ -31,3 +31,14 @@
   color: white;
   padding-top: 50px;
 }
+
+.center {
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.formGroup {
+  max-width: 75%;
+  display: flex;
+  justify-content: center;
+}
