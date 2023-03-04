@@ -5,18 +5,15 @@ import { Button, Grid, Card, CardContent, TextField, Typography, Stack, InputLab
 import styles from "../styles/Home.module.css"
 import Image from "next/image"
 import { uploadToArweave } from '@/utils/uploadToArweave';
-import {
-    Metaplex,
-    walletAdapterIdentity,
-    bundlrStorage,
-} from "@metaplex-foundation/js"
+import { getMetaplex } from '../utils/getMetaplex';
+import {toBigNumber} from '@metaplex-foundation/js'
 import * as web3 from "@solana/web3.js"
+import * as bs58 from "bs58";
 
 
 export const MintTimeCapsules: FC = () => {
 
     const wallet = useWallet()
-    const connection = new web3.Connection(web3.clusterApiUrl(strings.NETWORK as web3.Cluster));
     const [authorizedUser, setAuthourizedUser] = useState(false)
     const [submitDisabled, setSubmitDisabled] = useState(true)
     const [image, setImage] = useState<FileList | null>(null)
@@ -25,15 +22,7 @@ export const MintTimeCapsules: FC = () => {
     const [loading, setLoading] = useState(false);
     const [progress, setProgress] = useState(0);
     const [nftAddress, setNftAddress] = useState("")
-    const metaplex = Metaplex.make(connection)
-        .use(walletAdapterIdentity(wallet))
-        .use(
-            bundlrStorage({
-                address: strings.BUNDLR_STORAGE_ADDRESS,
-                providerUrl: strings.BUNDLR_STORAGE_PROVIDER_URL,
-                timeout: 60000,
-            })
-        )
+    const metaplex = getMetaplex(wallet, "wallet")
     const nftMetaData = {
         nftName: 'Time Capsule',
         description: 'Time Capsule for your memories.',
@@ -108,6 +97,10 @@ export const MintTimeCapsules: FC = () => {
                     sellerFeeBasisPoints: nftMetaData.sellerFeeBasisPoints,
                     symbol: nftMetaData.symbol,
                     isMutable: false,
+                    //useNewMint: web3.Keypair.fromSecretKey(bs58.decode(process.env.NEXT_PUBLIC_TIME_CAPSULE_MINT_SECRET as string)),
+                    //mintAuthority:  web3.Keypair.fromSecretKey(bs58.decode(process.env.NEXT_PUBLIC_TIME_CAPSULE_MINT_SECRET as string)),
+                    //useExistingMint: new web3.PublicKey("3XtjtH5G6mkwrxqe7btccEmUZ5qMo2XEWhs3ch55sKpb")
+                    
                 }, { commitment: "finalized" });
 
             console.log(`   Success!🎉`);
