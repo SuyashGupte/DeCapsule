@@ -11,8 +11,8 @@ pub mod decapsule {
         nfts: String,
         owner: Pubkey,
         capsule: Pubkey,
-        bury_time: u8,
-        seal_duration: u8,
+        bury_time: u32,
+        seal_duration: String,
         location: String,
     ) -> Result<()> {
         let time_capsule = &mut ctx.accounts.time_capsule;
@@ -29,7 +29,7 @@ pub mod decapsule {
     pub fn bury_nft(
         ctx: Context<BuryNFT>,
         _nft: String,
-        bury_time: u8,
+        bury_time: u32,
         location: String,
     ) -> Result<()> {
         let buried_nft = &mut ctx.accounts.buried_nft;
@@ -45,14 +45,14 @@ pub mod decapsule {
 }
 
 #[derive(Accounts)]
-#[instruction(nfts: String, capsule: Pubkey,bury_time: u8,seal_duration: u8,location: String)]
+#[instruction(nfts: String, capsule: Pubkey,bury_time: u32,seal_duration: String,location: String)]
 pub struct BuryTimeCapsule<'info> {
     #[account(
         init,
         seeds = ["capsule".as_bytes(), capsule.key().as_ref()],
         bump,
         payer = initializer,
-        space = 8 + 32 + 32 + 4 + 8
+        space = 4 + 32 + 4 + 4 + 4 + nfts.len() + seal_duration.len() + location.len()
     )]
     pub time_capsule: Account<'info, TimeCapsule>,
     #[account(mut)]
@@ -60,14 +60,14 @@ pub struct BuryTimeCapsule<'info> {
     pub system_program: Program<'info, System>,
 }
 #[derive(Accounts)]
-#[instruction(nft: Pubkey,bury_time: u8, location: String,)]
+#[instruction(nft: Pubkey,bury_time: u32, location: String,)]
 pub struct BuryNFT<'info> {
     #[account(
         init,
         seeds = ["buried_nft".as_bytes(), nft.key().as_ref() ],
         bump,
         payer = initializer,
-        space = 8 + 32 + 32 + 4 + 8
+        space = 32 + 4 + 4 + location.len()
     )]
     pub buried_nft: Account<'info, NftState>,
     #[account(mut)]
@@ -88,14 +88,14 @@ pub struct TimeCapsule {
     nfts: String,
     capsule: Pubkey,
     owner: Pubkey,
-    bury_time: u8,
-    seal_duration: u8,
+    bury_time: u32,
+    seal_duration: String,
     location: String,
 }
 
 #[account]
 pub struct NftState {
     nft: Pubkey,
-    bury_time: u8,
+    bury_time: u32,
     location: String,
 }
