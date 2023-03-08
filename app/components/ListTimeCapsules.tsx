@@ -5,7 +5,7 @@ import { strings } from "../constants/strings";
 import * as web3 from "@solana/web3.js"
 import Image from "next/image"
 import Link from "next/link"
-import { Button, Grid, Modal, Box, Typography, Stack, TextField, InputLabel, Select, MenuItem, FormControl, LinearProgress, Card } from '@mui/material';
+import { Button, Grid, Modal, Typography, Stack, TextField, LinearProgress, Card } from '@mui/material';
 import styles from "../styles/Home.module.css"
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -14,10 +14,8 @@ import * as token from "@solana/spl-token";
 import { uploadToArweave } from "../utils/uploadToArweave";
 import { uploadMetadata } from "../utils/uploadMetadata";
 import { mintNFT } from "../utils/mintNFT";
-import { transferNFT } from "../utils/transferNFT";
-import * as anchor from "@project-serum/anchor"
 import { useWorkspace } from "../context/Anchor"
-import { walletAdapterIdentity } from "@metaplex-foundation/js";
+
 
 export const ListTimeCapsules: FC = () => {
     const wallet = useWallet()
