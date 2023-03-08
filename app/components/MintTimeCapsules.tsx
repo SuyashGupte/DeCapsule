@@ -4,11 +4,10 @@ import { strings } from '../constants/strings'
 import { Button, Grid, Card, CardContent, TextField, Typography, Stack, InputLabel, Select, MenuItem, FormControl, LinearProgress } from '@mui/material';
 import styles from "../styles/Home.module.css"
 import Image from "next/image"
-import { uploadToArweave } from '@/utils/uploadToArweave';
+import { uploadToArweave } from '../utils/uploadToArweave';
 import { getMetaplex } from '../utils/getMetaplex';
-import {toBigNumber} from '@metaplex-foundation/js'
-import * as web3 from "@solana/web3.js"
-import * as bs58 from "bs58";
+import { uploadMetadata } from '../utils/uploadMetadata';
+import { mintNFT } from '../utils/mintNFT';
 
 
 export const MintTimeCapsules: FC = () => {
@@ -66,7 +65,7 @@ export const MintTimeCapsules: FC = () => {
         setTimeCapsuleNumber(e.target.valueAsNumber)
         validateForm(image, e.target.valueAsNumber)
     }
-    const mintNFT = async (e: React.FormEvent) => {
+    const mintNft = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true)
         setProgress(0)
@@ -79,32 +78,11 @@ export const MintTimeCapsules: FC = () => {
             let imageUri = await uploadToArweave(fileBuffer, image[0].name, metaplex)
             console.log(imageUri)
             setProgress(33)
-            const { uri } = await metaplex
-                .nfts()
-                .uploadMetadata({
-                    name: nftMetaData.nftName,
-                    description: nftMetaData.description,
-                    image: imageUri as string,
-                    attributes: nftMetaData.attributes,
-                });
-            //let uri = "https://arweave.net/o4rxFZFfgz4Ut0vWiQKj_Oo0nVX5G24Mrd2-OrHMpqs"
+            const metadataUri = await uploadMetadata(metaplex, nftMetaData.nftName, nftMetaData.description, imageUri as string, nftMetaData.attributes)
             setProgress(66)
-            const { nft } = await metaplex
-                .nfts()
-                .create({
-                    uri: uri,
-                    name: nftMetaData.nftName,
-                    sellerFeeBasisPoints: nftMetaData.sellerFeeBasisPoints,
-                    symbol: nftMetaData.symbol,
-                    isMutable: false,
-                    //useNewMint: web3.Keypair.fromSecretKey(bs58.decode(process.env.NEXT_PUBLIC_TIME_CAPSULE_MINT_SECRET as string)),
-                    //mintAuthority:  web3.Keypair.fromSecretKey(bs58.decode(process.env.NEXT_PUBLIC_TIME_CAPSULE_MINT_SECRET as string)),
-                    //useExistingMint: new web3.PublicKey("3XtjtH5G6mkwrxqe7btccEmUZ5qMo2XEWhs3ch55sKpb")
-                    
-                }, { commitment: "finalized" });
-
-            console.log(`   Success!🎉`);
-            console.log(`   Minted NFT: https://explorer.solana.com/address/${nft.address}?cluster=devnet`);
+            const nft = await mintNFT(metaplex, metadataUri, nftMetaData.nftName, nftMetaData.sellerFeeBasisPoints, nftMetaData.symbol, nftMetaData.creators)
+            console.log(`Success`);
+            console.log(`Minted NFT: https://explorer.solana.com/address/${nft.address}?cluster=devnet`);
             setProgress(100)
             setNftAddress(nft.address.toString())
         }
@@ -120,7 +98,7 @@ export const MintTimeCapsules: FC = () => {
                             <Typography gutterBottom variant="h5">
                                 Time Capsule Details
                             </Typography>
-                            <form onSubmit={mintNFT}>
+                            <form onSubmit={mintNft}>
                                 <Stack direction="column" spacing={5} className={styles.center}>
                                     {image ?
                                         <Image

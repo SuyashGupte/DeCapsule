@@ -1,0 +1,163 @@
+{
+  "version": "0.1.0",
+  "name": "decapsule",
+  "instructions": [
+    {
+      "name": "buryTimeCapsule",
+      "accounts": [
+        {
+          "name": "buriedTimeCapsule",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "initializer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "nfts",
+          "type": {
+            "vec": "publicKey"
+          }
+        },
+        {
+          "name": "capsule",
+          "type": "publicKey"
+        },
+        {
+          "name": "buryTime",
+          "type": "string"
+        },
+        {
+          "name": "sealDuration",
+          "type": "string"
+        },
+        {
+          "name": "location",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "buryNft",
+      "accounts": [
+        {
+          "name": "buriedNft",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "initializer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "nft",
+          "type": "publicKey"
+        },
+        {
+          "name": "buryTime",
+          "type": "string"
+        },
+        {
+          "name": "sealDuration",
+          "type": "string"
+        },
+        {
+          "name": "location",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "close",
+      "accounts": [
+        {
+          "name": "buriedTimeCapsule",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "initializer",
+          "isMut": true,
+          "isSigner": true
+        }
+      ],
+      "args": []
+    }
+  ],
+  "accounts": [
+    {
+      "name": "TimeCapsule",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "nfts",
+            "type": {
+              "vec": "publicKey"
+            }
+          },
+          {
+            "name": "capsule",
+            "type": "publicKey"
+          },
+          {
+            "name": "buryTime",
+            "type": "string"
+          },
+          {
+            "name": "sealDuration",
+            "type": "string"
+          },
+          {
+            "name": "location",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "NftState",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "nft",
+            "type": "publicKey"
+          },
+          {
+            "name": "buryTime",
+            "type": "string"
+          },
+          {
+            "name": "sealDuration",
+            "type": "string"
+          },
+          {
+            "name": "location",
+            "type": "string"
+          }
+        ]
+      }
+    }
+  ],
+  "metadata": {
+    "address": "6dJGf3EYNT3g8Qj9vXTxdVjzTGCs9udYu4cTRCEMGL9J"
+  }
+}

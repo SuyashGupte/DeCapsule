@@ -23,7 +23,7 @@ export const getMetaplex = (wallet: WalletContextState, type: string) => {
             )
         return metaplex
     }else{
-        const keypair = web3.Keypair.fromSecretKey(bs58.decode(process.env.NEXT_PUBLIC_TIME_CAPSULE_ACCOUNT_SECRET as string));
+        const keypair = web3.Keypair.fromSecretKey(bs58.decode(process.env.NEXT_PUBLIC_TIME_CAPSULE_BURIED_SECRET as string));
         const metaplex = Metaplex.make(connection)
         .use(keypairIdentity(keypair))
         .use(

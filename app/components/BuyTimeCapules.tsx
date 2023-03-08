@@ -8,6 +8,7 @@ import { Button, Grid, Modal, Box, Typography, Stack, InputLabel, Select, MenuIt
 import styles from "../styles/Home.module.css"
 import * as bs58 from "bs58";
 import * as token from "@solana/spl-token";
+import { transferNFT } from "../utils/transferNFT";
 
 
 
@@ -127,18 +128,11 @@ export const BuyTimeCapusles: FC = () => {
             setProgress(70)
             setProgressText("Tranfering Time Caspule")
             try {
-                let txhash = await token.transferChecked(
-                    connection, // connection
-                    web3.Keypair.fromSecretKey(bs58.decode(process.env.NEXT_PUBLIC_TIME_CAPSULE_ACCOUNT_SECRET as string)), // payer
-                    tokenAccountSender.address, // from (should be a token account)
-                    new web3.PublicKey(capsulePubKey), // mint
-                    tokenAccountReceiver.address, // to (should be a token account)
-                    web3.Keypair.fromSecretKey(bs58.decode(process.env.NEXT_PUBLIC_TIME_CAPSULE_ACCOUNT_SECRET as string)), // from's owner
-                    1, // amount, if your deciamls is 8, send 10^8 for 1 token
-                    0 // decimals
-                );
+                let txhash=await transferNFT(tokenAccountSender, tokenAccountReceiver,new web3.PublicKey(capsulePubKey),web3.Keypair.fromSecretKey(bs58.decode(process.env.NEXT_PUBLIC_TIME_CAPSULE_ACCOUNT_SECRET as string)),web3.Keypair.fromSecretKey(bs58.decode(process.env.NEXT_PUBLIC_TIME_CAPSULE_ACCOUNT_SECRET as string)))
+                
                 setProgress(100)
-                setProgressText("Hurray! Time Caspule Bought! Check your wallet or visit Home Page.")
+                setProgressColor("success")
+                setProgressText(`Hurray! Time Caspule Bought! Check your wallet or visit Home Page. <br/> Transaction : ${txhash}`)
             } catch {
                 setProgressText("Buying Failed! Refunding Sol")
                 setProgressColor("error")

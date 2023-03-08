@@ -1,41 +1,43 @@
 use anchor_lang::prelude::*;
 
-declare_id!("4vYgtqYrVNfRX8nXePm8XjUhaCuWpqmC2c2HJtU5LVff");
+declare_id!("6dJGf3EYNT3g8Qj9vXTxdVjzTGCs9udYu4cTRCEMGL9J");
 
 #[program]
 pub mod decapsule {
     use super::*;
 
+    #[inline(never)]
     pub fn bury_time_capsule(
         ctx: Context<BuryTimeCapsule>,
-        nfts: String,
-        owner: Pubkey,
+        nfts: Vec<Pubkey>,
         capsule: Pubkey,
-        bury_time: u32,
+        bury_time: String,
         seal_duration: String,
         location: String,
     ) -> Result<()> {
-        let time_capsule = &mut ctx.accounts.time_capsule;
-        time_capsule.nfts = nfts;
-        time_capsule.owner = owner;
-        time_capsule.capsule = capsule;
-        time_capsule.bury_time = bury_time;
-        time_capsule.seal_duration = seal_duration;
-        time_capsule.location = location;
-
+        let buried_time_capsule = &mut ctx.accounts.buried_time_capsule;
+        buried_time_capsule.nfts = nfts;
+        buried_time_capsule.capsule = capsule;
+        buried_time_capsule.bury_time = bury_time;
+        buried_time_capsule.seal_duration = seal_duration;
+        buried_time_capsule.location = location;
+       
         Ok(())
     }
 
+    #[inline(never)]
     pub fn bury_nft(
         ctx: Context<BuryNFT>,
-        _nft: String,
-        bury_time: u32,
+        nft: Pubkey,
+        bury_time: String,
+        seal_duration: String,
         location: String,
     ) -> Result<()> {
         let buried_nft = &mut ctx.accounts.buried_nft;
+        buried_nft.nft = nft;
         buried_nft.bury_time = bury_time;
+        buried_nft.seal_duration = seal_duration;
         buried_nft.location = location;
-
         Ok(())
     }
 
@@ -45,29 +47,29 @@ pub mod decapsule {
 }
 
 #[derive(Accounts)]
-#[instruction(nfts: String, capsule: Pubkey,bury_time: u32,seal_duration: String,location: String)]
+#[instruction(nfts: Vec<Pubkey>, capsule: Pubkey, bury_time: String, seal_duration: String, location: String)]
 pub struct BuryTimeCapsule<'info> {
     #[account(
         init,
-        seeds = ["capsule".as_bytes(), capsule.key().as_ref()],
+        seeds = [capsule.key().as_ref()],
         bump,
         payer = initializer,
-        space = 4 + 32 + 4 + 4 + 4 + nfts.len() + seal_duration.len() + location.len()
+        space = 1024
     )]
-    pub time_capsule: Account<'info, TimeCapsule>,
+    pub buried_time_capsule: Account<'info, TimeCapsule>,
     #[account(mut)]
     pub initializer: Signer<'info>,
     pub system_program: Program<'info, System>,
 }
 #[derive(Accounts)]
-#[instruction(nft: Pubkey,bury_time: u32, location: String,)]
+#[instruction(nft:Pubkey ,bury_time: String, seal_duration: String, location: String,)]
 pub struct BuryNFT<'info> {
     #[account(
         init,
-        seeds = ["buried_nft".as_bytes(), nft.key().as_ref() ],
+        seeds = [nft.key().as_ref()],
         bump,
         payer = initializer,
-        space = 32 + 4 + 4 + location.len()
+        space = 1024
     )]
     pub buried_nft: Account<'info, NftState>,
     #[account(mut)]
@@ -77,18 +79,17 @@ pub struct BuryNFT<'info> {
 
 #[derive(Accounts)]
 pub struct Close<'info> {
-    #[account(mut, close = owner)]
-    time_capsule: Account<'info, TimeCapsule>,
+    #[account(mut, close = initializer)]
+    buried_time_capsule: Account<'info, TimeCapsule>,
     #[account(mut)]
-    owner: Signer<'info>,
+    pub initializer: Signer<'info>,
 }
 
 #[account]
 pub struct TimeCapsule {
-    nfts: String,
+    nfts: Vec<Pubkey>,
     capsule: Pubkey,
-    owner: Pubkey,
-    bury_time: u32,
+    bury_time: String,
     seal_duration: String,
     location: String,
 }
@@ -96,6 +97,7 @@ pub struct TimeCapsule {
 #[account]
 pub struct NftState {
     nft: Pubkey,
-    bury_time: u32,
+    bury_time: String,
+    seal_duration: String,
     location: String,
 }

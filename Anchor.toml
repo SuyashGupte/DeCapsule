@@ -2,7 +2,7 @@
 seeds = false
 skip-lint = false
 [programs.localnet]
-decapsule = "4vYgtqYrVNfRX8nXePm8XjUhaCuWpqmC2c2HJtU5LVff"
+decapsule = "6dJGf3EYNT3g8Qj9vXTxdVjzTGCs9udYu4cTRCEMGL9J"
 
 [registry]
 url = "https://api.apr.dev"

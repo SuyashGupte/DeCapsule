@@ -3,6 +3,7 @@ import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import { Header } from '../components/Header'
 import { ListTimeCapsules } from '../components/ListTimeCapsules'
+import { ListBuriedCapsules } from '../components/ListBuriedCapsules'
 
 const Home: NextPage = () => {
   return (
@@ -12,6 +13,7 @@ const Home: NextPage = () => {
       </Head>
       <Header />
       <ListTimeCapsules />
+      <ListBuriedCapsules />
     </div>
   )
 }
