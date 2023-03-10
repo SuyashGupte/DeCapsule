@@ -253,26 +253,24 @@ export const ListTimeCapsules: FC = () => {
                     }
 
                 }
+                let sender = wallet.publicKey
+                let receiver = new web3.PublicKey(strings.BURIED_TIME_CAPSULE)
+                let mint = capsule
                 console.log(web3.Keypair.fromSecretKey(bs58.decode(process.env.NEXT_PUBLIC_TIME_CAPSULE_BURIED_SECRET as string)), wallet.publicKey)
-                let tokenAccountSender = await token.getOrCreateAssociatedTokenAccount(
-                    connection,
-                    web3.Keypair.fromSecretKey(bs58.decode(process.env.NEXT_PUBLIC_TIME_CAPSULE_BURIED_SECRET as string)),
-                    capsule,
-                    wallet.publicKey,
-                )
-
-                let tokenAccountReceiver = await token.getOrCreateAssociatedTokenAccount(
-                    connection,
-                    web3.Keypair.fromSecretKey(bs58.decode(process.env.NEXT_PUBLIC_TIME_CAPSULE_ACCOUNT_SECRET as string)),
-                    capsule,
-                    new web3.PublicKey(strings.BURIED_TIME_CAPSULE),
-                )
+                let tokenAccountSender = await connection.getTokenAccountsByOwner(sender, {
+                    mint: mint
+                });
+    
+                
+                let tokenAccountReceiver= await connection.getTokenAccountsByOwner(receiver, {
+                    mint: mint
+                });
                 console.log(tokenAccountReceiver, tokenAccountSender)
                 let tx = new web3.Transaction().add(
                     token.createTransferCheckedInstruction(
-                        tokenAccountSender.address, // from (should be a token account)
+                        tokenAccountSender.value[0].pubkey, // from (should be a token account)
                         capsule, // mint
-                        tokenAccountReceiver.address, // to (should be a token account)
+                        tokenAccountReceiver.value[0].pubkey, // to (should be a token account)
                         wallet.publicKey, // from's owner
                         1, // amount, if your deciamls is 8, send 10^8 for 1 token
                         0 // decimals
@@ -293,9 +291,11 @@ export const ListTimeCapsules: FC = () => {
                 wallet.connected ?
                     <Grid>
                         <h2 className={styles.whiteText}>No Capsules Found. Buy one now!</h2>
-                        <Button variant="contained" component="label" className={styles.center}>
-                            <Link href="/buy">Buy</Link>
-                        </Button>
+                        <Link href="/buy">
+                            <Button variant="contained" component="label" className={styles.center}>
+                                Buy
+                            </Button>
+                        </Link>
                     </Grid> : <h2 className={styles.whiteText}>Wallet not connected! Please connect wallet.</h2>
                 :
                 timeCapsules.map((element: any) => {

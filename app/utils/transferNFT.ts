@@ -8,9 +8,9 @@ export const transferNFT = async (tokenAccountSender:any, tokenAccountReceiver:a
     let txhash = await token.transferChecked(
         connection, // connection
         payer, // payer
-        tokenAccountSender.address, // from (should be a token account)
+        tokenAccountSender, // from (should be a token account)
         nftMintAddress, // mint
-        tokenAccountReceiver.address, // to (should be a token account)
+        tokenAccountReceiver, // to (should be a token account)
         owner, // from's owner
         1, // amount, if your decimals is 8, send 10^8 for 1 token
         0 // decimals

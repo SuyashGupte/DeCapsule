@@ -101,26 +101,25 @@ export const BuyTimeCapusles: FC = () => {
             console.log(nftOrSft)
             setProgress(40)
             setProgressText("Finding Token Accounts!")
-            let tokenAccountSender;
-            let tokenAccountReceiver;
+            let tokenAccountSender
+            let tokenAccountReceiver
+            let sender = new web3.PublicKey(strings.TIME_CAPSULE_ACCOUNT)
+            let receiver = wallet.publicKey
+            let mint = new web3.PublicKey(capsulePubKey)
+            let payer = web3.Keypair.fromSecretKey(bs58.decode(process.env.NEXT_PUBLIC_TIME_CAPSULE_ACCOUNT_SECRET as string))
             try {
-                tokenAccountSender = await token.getOrCreateAssociatedTokenAccount(
-                    connection,
-                    web3.Keypair.fromSecretKey(bs58.decode(process.env.NEXT_PUBLIC_TIME_CAPSULE_ACCOUNT_SECRET as string)),
-                    new web3.PublicKey(capsulePubKey),
-                    new web3.PublicKey(strings.TIME_CAPSULE_ACCOUNT),
-                )
-
-                tokenAccountReceiver = await token.getOrCreateAssociatedTokenAccount(
-                    connection,
-                    web3.Keypair.fromSecretKey(bs58.decode(process.env.NEXT_PUBLIC_TIME_CAPSULE_ACCOUNT_SECRET as string)),
-                    new web3.PublicKey(capsulePubKey),
-                    new web3.PublicKey(wallet.publicKey),
-                )
+                tokenAccountSender = await connection.getTokenAccountsByOwner(sender, {
+                    mint: mint
+                });
+    
+                console.log(tokenAccountSender.value[0].pubkey.toString());
+                tokenAccountReceiver= await connection.getTokenAccountsByOwner(receiver, {
+                    mint: mint
+                });
                 setProgress(60)
                 setProgressText("Token Accounts Found!")
-            } catch {
-
+            } catch (e) {
+                console.log(e)
                 setProgressText("Token Accounts not found!")
                 setProgressColor("error")
                 return
@@ -128,11 +127,11 @@ export const BuyTimeCapusles: FC = () => {
             setProgress(70)
             setProgressText("Tranfering Time Caspule")
             try {
-                let txhash=await transferNFT(tokenAccountSender, tokenAccountReceiver,new web3.PublicKey(capsulePubKey),web3.Keypair.fromSecretKey(bs58.decode(process.env.NEXT_PUBLIC_TIME_CAPSULE_ACCOUNT_SECRET as string)),web3.Keypair.fromSecretKey(bs58.decode(process.env.NEXT_PUBLIC_TIME_CAPSULE_ACCOUNT_SECRET as string)))
-                
+                let txhash = await transferNFT(tokenAccountSender.value[0].pubkey, tokenAccountReceiver.value[0].pubkey, mint , payer, payer)
+
                 setProgress(100)
                 setProgressColor("success")
-                setProgressText(`Hurray! Time Caspule Bought! Check your wallet or visit Home Page. <br/> Transaction : ${txhash}`)
+                setProgressText(`Hurray! Time Caspule Bought!Transaction : ${txhash}`)
             } catch {
                 setProgressText("Buying Failed! Refunding Sol")
                 setProgressColor("error")
