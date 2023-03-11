@@ -50,7 +50,7 @@ export const Header: FC = () => {
                         <Image
                             width={60}
                             height={60}
-                            src="/../public/DeCapsule.png"
+                            src={"/static/images/DeCapsule.png"}
                             alt="" />
                     </Typography>
 
@@ -111,7 +111,7 @@ export const Header: FC = () => {
                         <Image
                             width={60}
                             height={60}
-                            src="/../public/DeCapsule.png"
+                            src={"/static/images/DeCapsule.png"}
                             alt="" />
                     </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
