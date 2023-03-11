@@ -154,7 +154,7 @@ export const MintTimeCapsules: FC = () => {
                     </Card>
                 </Grid>
             </div> : <div>
-                <h2>You are not authorized to view this page.</h2>
+                <h2 className={styles.whiteText}>You are not authorized to view this page.</h2>
             </div>
     )
 }

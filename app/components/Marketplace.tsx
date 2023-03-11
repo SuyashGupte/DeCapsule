@@ -1,8 +1,7 @@
 import { useWallet } from "@solana/wallet-adapter-react";
 import { getMetaplex } from "../utils/getMetaplex";
 import { FC, useState, useEffect } from "react";
-import Image from "next/image"
-import { Button, Grid, Typography, Stack, Card, CardContent, CardActions, CardMedia, Box } from '@mui/material';
+import { Button, Grid, Typography, Card, CardContent, CardActions, CardMedia, Box } from '@mui/material';
 import styles from "../styles/Home.module.css"
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { useWorkspace } from "../context/Anchor"

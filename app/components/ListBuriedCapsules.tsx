@@ -1,6 +1,6 @@
 
 import { FC, useEffect, useState } from "react"
-import { Button, Grid, Modal, Typography, Stack, TextField, LinearProgress, Card, Paper, Dialog, DialogActions, DialogTitle, DialogContent, DialogContentText, CardContent, CardMedia, Box } from '@mui/material';
+import { Button, Grid, Typography, Stack, Card, Paper, Dialog, DialogActions, DialogTitle, DialogContent, DialogContentText, CardContent, CardMedia, Box } from '@mui/material';
 import styles from "../styles/Home.module.css"
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { useWorkspace } from "../context/Anchor"
@@ -10,7 +10,6 @@ import Countdown from "react-countdown"
 import Image from "next/image"
 import Link from "next/link"
 import * as bs58 from "bs58";
-import * as token from "@solana/spl-token";
 import { strings } from "../constants/strings";
 import * as web3 from "@solana/web3.js"
 import { transferNFT } from "../utils/transferNFT";

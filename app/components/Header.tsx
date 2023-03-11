@@ -1,5 +1,4 @@
 import { FC, useState } from 'react'
-import styles from '../styles/Home.module.css'
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
 import Image from "next/image"
 import Link from "next/link"
@@ -11,11 +10,9 @@ import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
+
 
 const pages = [{ name: 'Marketplace', href: "/market" }, { name: 'Buy Capsule', href: "/buy" }, { name: 'Verify', href: "/verify" }];
 
@@ -95,7 +92,6 @@ export const Header: FC = () => {
                             ))}
                         </Menu>
                     </Box>
-                    <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
                     <Typography
                         variant="h5"
                         noWrap
@@ -112,7 +108,11 @@ export const Header: FC = () => {
                             textDecoration: 'none',
                         }}
                     >
-                        LOGO
+                        <Image
+                            width={60}
+                            height={60}
+                            src="/../public/DeCapsule.png"
+                            alt="" />
                     </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         {pages.map((page) => (

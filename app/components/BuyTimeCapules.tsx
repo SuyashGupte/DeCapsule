@@ -4,10 +4,9 @@ import { FC, useState, useEffect } from "react";
 import { strings } from "../constants/strings";
 import * as web3 from "@solana/web3.js"
 import Image from "next/image"
-import { Button, Grid, Modal, Box, Typography, Stack, InputLabel, Select, MenuItem, FormControl, LinearProgress, Card } from '@mui/material';
+import { Button, Grid, Modal, Typography, Stack, LinearProgress, Card } from '@mui/material';
 import styles from "../styles/Home.module.css"
 import * as bs58 from "bs58";
-import * as token from "@solana/spl-token";
 import { transferNFT } from "../utils/transferNFT";
 
 
@@ -173,7 +172,7 @@ export const BuyTimeCapusles: FC = () => {
                     )
                 })
 
-                : <p>No Capsules available at this moment.</p>}
+                : <p className={styles.whiteText}>No Capsules available at this moment.</p>}
             <Modal
                 open={open}
                 onClose={handleClose}
